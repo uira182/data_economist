@@ -1,0 +1,67 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Ambientes virtuais
+.venv/
+venv/
+ENV/
+env/
+
+# Token e segredos (NUNCA commitar)
+.env
+.env.local
+.env.*.local
+*.pypirc
+config/secrets.*
+**/secrets.py
+**/tokens.txt
+**/credentials*
+
+# IDE e editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testes e cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+
+# mypy, ruff cache
+.mypy_cache/
+.ruff_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Build e publicação
+*.manifest

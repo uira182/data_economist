@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "data-economist"
+version = "0.1.0"
+description = "Pacote Python para analistas e consultoria económica: funções para baixar dados de fontes económicas de forma fácil."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+  {name = "Uirá de Souza", email = "uira182@hotmail.com"}
+]
+keywords = [
+  "economics",
+  "economic data",
+  "BCE",
+  "Eurostat",
+  "IMF",
+  "consultoria economica",
+  "analise economica",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Financial and Insurance Industry",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Office/Business :: Financial",
+]
+requires-python = ">=3.9"
+dependencies = [
+  "pandas>=1.3.0",
+  "requests>=2.26.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "black", "ruff", "python-dotenv"]
+
+[project.urls]
+Homepage = "https://github.com/uiradesouza/data_economist"
+Documentation = "https://github.com/uiradesouza/data_economist/tree/main/docs"
+Repository = "https://github.com/uiradesouza/data_economist"
+"Bug Tracker" = "https://github.com/uiradesouza/data_economist/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
