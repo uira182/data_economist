@@ -30,3 +30,10 @@ def test_import_bcb_sgs():
     import data_economist
     assert hasattr(data_economist, "bcb_sgs")
     assert hasattr(data_economist.bcb_sgs, "get")
+
+
+def test_import_comexstat():
+    """from data_economist import comexstat expõe o módulo comexstat com .get(body)."""
+    import data_economist
+    assert hasattr(data_economist, "comexstat")
+    assert hasattr(data_economist.comexstat, "get")
