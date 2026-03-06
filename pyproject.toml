@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "data-economist"
-version = "0.1.0"
+version = "0.2.0"
 description = "Pacote Python para analistas e consultoria económica: funções para baixar dados de fontes económicas de forma fácil."
 readme = "README.md"
 license = {text = "MIT"}

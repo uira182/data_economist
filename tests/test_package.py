@@ -23,3 +23,10 @@ def test_import_ibge():
     assert hasattr(data_economist, "ibge")
     assert hasattr(data_economist.ibge, "url")
     assert hasattr(data_economist.ibge, "get")
+
+
+def test_import_bcb_sgs():
+    """from data_economist import bcb_sgs expõe o módulo bcb_sgs com .get()."""
+    import data_economist
+    assert hasattr(data_economist, "bcb_sgs")
+    assert hasattr(data_economist.bcb_sgs, "get")

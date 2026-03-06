@@ -7,6 +7,7 @@ Bem-vindo à documentação do **data_economist**, um pacote Python para baixar 
 | Documento | Descrição |
 |----------|-----------|
 | [Fonte IBGE](fonte-ibge.md) | Documentação do módulo **ibge**: `get(t,n,v,p,c)`, `url()`, `metadados(tabela)` |
+| [Fonte BCB SGS](fonte-bcb-sgs.md) | Documentação do módulo **bcb_sgs**: `get(codigo, date_init, date_end)` — séries do Banco Central (SGS) |
 | [Antes do commit](antes-do-commit.md) | O que não deve ir para o GitHub e verificação antes do push / PyPI |
 | [Guia de publicação do pacote](guia-publicacao-pacote.md) | Como criar, empacotar e publicar o pacote para a comunidade (PyPI, etc.) |
 | [Estrutura do projeto](estrutura-projeto.md) | Estrutura de pastas e ficheiros recomendada para o pacote |

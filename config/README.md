@@ -1,5 +1,14 @@
 # Configuração e token PyPI
 
+## Test PyPI vs PyPI (produção)
+
+| Site | Uso | Comando de upload |
+|------|-----|-------------------|
+| **test.pypi.org** | Testar antes de publicar | `twine upload --repository testpypi dist/*` ou `python scripts/upload_testpypi.py` |
+| **pypi.org** | Produção (pip install data-economist) | `twine upload dist/*` ou `python scripts/upload_pypi.py` |
+
+O **token do Test PyPI** só funciona em test.pypi.org. O **token do PyPI (produção)** é outro, em pypi.org. Se no .env tens o token do Test PyPI, usa o script **upload_testpypi.py** para publicar no Test PyPI.
+
 ## Onde guardar o token do PyPI
 
 O token **nunca** deve ser commitado no Git. Use uma destas opções:

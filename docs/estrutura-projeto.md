@@ -10,9 +10,12 @@ Esta página descreve a estrutura de pastas e ficheiros recomendada para o **dat
 data_economist/                    # Raiz do repositório
 ├── src/
 │   └── data_economist/            # Código do pacote (o que vai no PyPI)
-│       ├── __init__.py            # Expõe a API pública
-│       └── fontes/                # Módulos por fonte (BCE, Eurostat, IMF...)
-│           └── __init__.py
+│       ├── __init__.py            # Expõe a API pública (ibge, bcb_sgs)
+│       ├── ibge.py                # IBGE SIDRA e metadados
+│       ├── bcb_sgs.py             # Banco Central — SGS (séries temporais)
+│       └── fontes/                 # Módulos por fonte
+│           ├── __init__.py
+│           └── sidra.py            # Reexporta ibge
 ├── docs/                          # Documentação (como esta)
 │   ├── README.md
 │   ├── guia-publicacao-pacote.md
@@ -80,13 +83,13 @@ from data_economist import baixar_taxas_bce
 
 ## Organização por fonte económica
 
-Pode organizar as funções por fonte (BCE, Eurostat, IMF, etc.) em módulos separados:
+As funções estão organizadas por fonte em módulos:
 
-- `data_economist/bce.py` — funções que usam APIs/dados do BCE
-- `data_economist/eurostat.py` — Eurostat
-- `data_economist/imf.py` — IMF
+- **`data_economist/ibge.py`** — API SIDRA e API de Agregados do IBGE: `get()`, `url()`, `metadados()`. Ver [Fonte IBGE](fonte-ibge.md).
+- **`data_economist/bcb_sgs.py`** — Séries temporais do Banco Central (SGS): `get(codigo, date_init, date_end)`. Ver [Fonte BCB SGS](fonte-bcb-sgs.md).
+- **`data_economist/fontes/sidra.py`** — Reexporta funções do ibge para uso por fonte.
 
-Cada módulo pode ter várias funções (por série, por indicador, etc.). No `__init__.py` importe e liste em `__all__` apenas as funções que considera estáveis e públicas.
+Outras fontes (BCE, Eurostat, IMF) podem ser adicionadas em módulos separados. No `__init__.py` importe e liste em `__all__` os módulos e funções estáveis e públicas.
 
 ---
 

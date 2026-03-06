@@ -46,7 +46,24 @@ meta = ibge.metadados(8888)
 # meta["nome"], meta["variaveis"], meta["classificacoes"], meta["periodicidade"], etc.
 ```
 
-Documentação completa da fonte IBGE: [docs/fonte-ibge.md](docs/fonte-ibge.md).  
+Documentação completa da fonte IBGE: [docs/fonte-ibge.md](docs/fonte-ibge.md).
+
+### Fonte BCB SGS (Banco Central — séries temporais)
+
+```python
+from data_economist import bcb_sgs
+
+# Série completa (último valor → para trás, de 10 em 10 anos)
+dados = bcb_sgs.get(433)   # 433 = IPCA
+
+# Com datas: início, ou fim, ou intervalo (formato YYYY-MM-DD)
+dados = bcb_sgs.get(433, "2020-01-01")              # de 2020 até o último valor
+dados = bcb_sgs.get(433, None, "2000-01-06")       # de 2000-01-06 para trás
+dados = bcb_sgs.get(433, "2020-01-01", "2025-01-01")  # só o intervalo 2020–2025
+# Cada item: {"data": "DD/MM/YYYY", "valor": "..."}
+```
+
+Documentação completa da fonte BCB SGS: [docs/fonte-bcb-sgs.md](docs/fonte-bcb-sgs.md).  
 Outras fontes (BCE, Eurostat, IMF) serão documentadas em [docs/](docs/).
 
 ---
@@ -69,6 +86,7 @@ data_economist/
 
 - [Índice da documentação](docs/README.md)
 - [Fonte IBGE (get e metadados)](docs/fonte-ibge.md)
+- [Fonte BCB SGS (Banco Central — séries temporais)](docs/fonte-bcb-sgs.md)
 - [Guia de publicação no PyPI](docs/guia-publicacao-pacote.md)
 - [Estrutura do projeto](docs/estrutura-projeto.md)
 - [Uso pelo utilizador](docs/uso-pelo-utilizador.md)
