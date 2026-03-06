@@ -2,12 +2,12 @@
 
 ## Test PyPI vs PyPI (produção)
 
-| Site | Uso | Comando de upload |
-|------|-----|-------------------|
-| **test.pypi.org** | Testar antes de publicar | `twine upload --repository testpypi dist/*` ou `python scripts/upload_testpypi.py` |
-| **pypi.org** | Produção (pip install data-economist) | `twine upload dist/*` ou `python scripts/upload_pypi.py` |
+| Site | Variáveis no .env | Script |
+|------|-------------------|--------|
+| **test.pypi.org** | `TWINE_USERNAME=__token__` e **`TWINE_TEST_PASSWORD`** (token Test PyPI) | `python scripts/upload_testpypi.py` |
+| **pypi.org** | `TWINE_USERNAME=__token__` e **`TWINE_PASSWORD`** (token PyPI produção) | `python scripts/upload_pypi.py` |
 
-O **token do Test PyPI** só funciona em test.pypi.org. O **token do PyPI (produção)** é outro, em pypi.org. Se no .env tens o token do Test PyPI, usa o script **upload_testpypi.py** para publicar no Test PyPI.
+Assim pode ter no mesmo `.env` os dois tokens: **TWINE_PASSWORD** para pypi.org e **TWINE_TEST_PASSWORD** para test.pypi.org. O script de Test PyPI usa apenas `TWINE_TEST_PASSWORD`.
 
 ## Onde guardar o token do PyPI
 
@@ -16,11 +16,16 @@ O token **nunca** deve ser commitado no Git. Use uma destas opções:
 ### Opção 1: Ficheiro `.env` na raiz do projeto (recomendado)
 
 1. Na raiz do projeto (`c:\BAU\data_economist\`), crie um ficheiro chamado **`.env`**.
-2. Adicione (substitua pelo seu token real):
+2. Adicione (substitua pelos seus tokens reais):
 
    ```
    TWINE_USERNAME=__token__
-   TWINE_PASSWORD=pypi-xxxxxxxxxxxxxxxx
+   TWINE_PASSWORD=pypi-xxxxxxxx          # token pypi.org (produção)
+   TWINE_TEST_PASSWORD=pypi-xxxxxxxx     # token test.pypi.org (testes)
+
+   # Token EIA (para o módulo eia — dados energéticos)
+   # Obtenha em: https://www.eia.gov/opendata/register.php
+   TOKEN_EIA=seu_token_eia
    ```
 
 3. O `.env` já está no `.gitignore`, por isso não será enviado para o GitHub.

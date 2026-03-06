@@ -9,6 +9,7 @@ Bem-vindo à documentação do **data_economist**, um pacote Python para baixar 
 | [Fonte IBGE](fonte-ibge.md) | Documentação do módulo **ibge**: `get(t,n,v,p,c)`, `url()`, `metadados(tabela)` |
 | [Fonte BCB SGS](fonte-bcb-sgs.md) | Documentação do módulo **bcb_sgs**: `get(codigo, date_init, date_end)` — séries do Banco Central (SGS) |
 | [Fonte ComexStat](fonte-comexstat.md) | Documentação do módulo **comexstat**: `get(body)`, `get_general(...)`, `get_filter(id)`, `get_by_filter(id\|url)` — comércio exterior (MDIC) |
+| [Fonte EIA](fonte-eia.md) | Documentação do módulo **eia**: `get`, `get_data`, `get_steo`, `get_petroleum`, `get_by_landing` — dados energéticos; requer **TOKEN_EIA** no .env |
 | [Antes do commit](antes-do-commit.md) | O que não deve ir para o GitHub e verificação antes do push / PyPI |
 | [Guia de publicação do pacote](guia-publicacao-pacote.md) | Como criar, empacotar e publicar o pacote para a comunidade (PyPI, etc.) |
 | [Estrutura do projeto](estrutura-projeto.md) | Estrutura de pastas e ficheiros recomendada para o pacote |
