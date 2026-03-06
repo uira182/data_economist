@@ -37,3 +37,14 @@ def test_import_comexstat():
     import data_economist
     assert hasattr(data_economist, "comexstat")
     assert hasattr(data_economist.comexstat, "get")
+
+
+def test_import_eia():
+    """from data_economist import eia expõe .get(), .get_data(), .get_steo(), .get_petroleum(), .get_by_landing()."""
+    import data_economist
+    assert hasattr(data_economist, "eia")
+    assert hasattr(data_economist.eia, "get")
+    assert hasattr(data_economist.eia, "get_data")
+    assert hasattr(data_economist.eia, "get_steo")
+    assert hasattr(data_economist.eia, "get_petroleum")
+    assert hasattr(data_economist.eia, "get_by_landing")

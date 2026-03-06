@@ -84,7 +84,7 @@ print()
 # 6) BCB SGS — bcb_sgs.get(codigo) — série completa
 # ---------------------------------------------------------------------------
 print("=" * 60)
-print("6) BCB SGS — bcb_sgs.get(433)  [série completa, último valor → para trás]")
+print("6) BCB SGS — bcb_sgs.get(433)  [serie completa, ultimo valor -> para tras]")
 print("=" * 60)
 
 try:
@@ -241,10 +241,51 @@ except Exception as e:
 print()
 
 # ---------------------------------------------------------------------------
-# 12) Resumo final
+# 12) EIA — get, get_data, get_steo, get_petroleum, get_by_landing [TOKEN_EIA no .env]
 # ---------------------------------------------------------------------------
 print("=" * 60)
-print("12) Resumo")
+print("12) EIA — get, get_data, get_steo, get_petroleum, get_by_landing")
+print("=" * 60)
+
+try:
+    from data_economist import eia
+
+    # Por URL completa
+    url_eia = (
+        "https://api.eia.gov/v2/steo/data/?frequency=monthly&data[0]=value"
+        "&facets[seriesId][]=PATC_WORLD&sort[0][column]=period&sort[0][direction]=desc&offset=0&length=5"
+    )
+    dados_eia = eia.get_data(url_eia, timeout=15)
+    print(f"  get_data(url): {len(dados_eia)} registros")
+    if dados_eia:
+        print(f"  Exemplo: period={dados_eia[0].get('period')}, value={dados_eia[0].get('value')}")
+
+    # Por parâmetros (STEO)
+    dados_steo = eia.get_steo("PATC_WORLD", "monthly", length=5, timeout=15)
+    print(f"  get_steo('PATC_WORLD', 'monthly'): {len(dados_steo)} registros")
+
+    # Por parâmetros (Petroleum) — uma série diária
+    dados_pet = eia.get_petroleum("pri/spt", "EER_EPMRU_PF4_RGC_DPG", "daily", length=5, timeout=15)
+    print(f"  get_petroleum('pri/spt', 'EER_EPMRU_...', 'daily'): {len(dados_pet)} registros")
+
+    # Mapeamento landing — um setor/frequência (amostra: min_sid mensal = 1 série)
+    landing = eia.get_by_landing("min_sid", "monthly", timeout=15)
+    print(f"  get_by_landing('min_sid', 'monthly'): {len(landing)} série(s), chaves={list(landing.keys())}")
+
+    print("OK — eia.get, get_data, get_steo, get_petroleum, get_by_landing.")
+except ImportError as e:
+    print(f"(ImportError: {e})")
+except ValueError as e:
+    print("(Defina TOKEN_EIA no .env — https://www.eia.gov/opendata/register.php)")
+except Exception as e:
+    print(f"Erro: {type(e).__name__}: {e}")
+print()
+
+# ---------------------------------------------------------------------------
+# 13) Resumo final
+# ---------------------------------------------------------------------------
+print("=" * 60)
+print("13) Resumo")
 print("=" * 60)
 print("Pacote data_economist utilizado com sucesso (instalado via pip).")
 print("IBGE: metadados, get(), url() — OK.")
@@ -252,6 +293,8 @@ if hasattr(data_economist, "bcb_sgs"):
     print("BCB SGS: get(codigo, date_init, date_end) — OK.")
 if hasattr(data_economist, "comexstat"):
     print("ComexStat: get(body), get_general(...), get_filter(id), get_by_filter(id|url) — OK.")
+if hasattr(data_economist, "eia"):
+    print("EIA: get, get_data, get_steo, get_petroleum, get_by_landing — TOKEN_EIA no .env.")
 print()
 sys.exit(0)
 

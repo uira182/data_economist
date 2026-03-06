@@ -92,6 +92,26 @@ registos = dados["data"]["list"]
 
 Documentação completa: [docs/fonte-comexstat.md](docs/fonte-comexstat.md). API oficial: [ComexStat MDIC](https://api-comexstat.mdic.gov.br/docs).
 
+### Fonte EIA (U.S. Energy Information Administration)
+
+Requer **token de API** no ficheiro `.env`: `TOKEN_EIA=seu_token` (obtenha em [eia.gov/opendata/register.php](https://www.eia.gov/opendata/register.php)).
+
+```python
+from data_economist import eia
+
+# Por URL completa
+dados = eia.get_data("https://api.eia.gov/v2/steo/data/?frequency=monthly&...")
+
+# Por parâmetros (STEO e Petroleum — mapeamento landing Databricks)
+dados = eia.get_steo("PATC_WORLD", "monthly")
+dados = eia.get_petroleum("pri/spt", "EER_EPMRU_PF4_RGC_DPG", "daily")
+
+# Todos os dados de um setor e frequência
+tudo = eia.get_by_landing("petroleo", "monthly")  # dict série → lista de registos
+```
+
+Documentação completa: [docs/fonte-eia.md](docs/fonte-eia.md).
+
 ---
 
 ## Estrutura do projeto
@@ -114,6 +134,7 @@ data_economist/
 - [Fonte IBGE (get e metadados)](docs/fonte-ibge.md)
 - [Fonte BCB SGS (Banco Central — séries temporais)](docs/fonte-bcb-sgs.md)
 - [Fonte ComexStat (MDIC — comércio exterior)](docs/fonte-comexstat.md)
+- [Fonte EIA (U.S. Energy Information Administration)](docs/fonte-eia.md)
 - [Plano ComexStat (MDIC)](docs/planos/plano-comexstat.md)
 - [Guia de publicação no PyPI](docs/guia-publicacao-pacote.md)
 - [Estrutura do projeto](docs/estrutura-projeto.md)
