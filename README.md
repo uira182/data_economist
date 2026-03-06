@@ -101,4 +101,8 @@ MIT. Ver [LICENSE](LICENSE).
 
 ## Contribuir
 
-Projeto público no GitHub. Issues e pull requests são bem-vindos. Ver documentação em `docs/` para como publicar releases e como utilizadores podem instalar e usar o pacote.
+O projeto é **livre** e público no GitHub: issues e pull requests são bem-vindos. O código está sob licença MIT e pode ser usado e adaptado conforme a licença.
+
+**Governança:** o mantenedor (dono do repositório) **aprova os merges para a branch `main`** (via [CODEOWNERS](.github/CODEOWNERS)) e **gera as atualizações do pacote** (releases e publicação no PyPI). Assim, contribuições entram após revisão, e as novas versões são publicadas de forma centralizada.
+
+Ver documentação em `docs/` para como publicar releases e como utilizadores podem instalar e usar o pacote.

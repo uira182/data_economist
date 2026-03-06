@@ -19,6 +19,8 @@ Bem-vindo à documentação do **data_economist**, um pacote Python para baixar 
 
 Pacote desenvolvido por **Uirá de Souza** (desenvolvedor há mais de 10 anos, formado em Ciência da Computação), pensado para analistas e consultoria económica. Publicado no GitHub e no PyPI para uso pela comunidade.
 
+O projeto é **livre** (código aberto, licença MIT). O mantenedor **aprova os merges para a `main`** e **publica as atualizações do pacote** (releases no GitHub e no PyPI), de modo a manter um fluxo estável de versões.
+
 **Configuração e token PyPI:** ver [config/README.md](../config/README.md) na pasta `config/` para onde guardar o token e como usá-lo na publicação.
 
 ## Objetivo do projeto
