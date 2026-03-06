@@ -27,7 +27,7 @@ pip install data-economist
 
 Após a instalação, o utilizador importa o pacote e chama as funções que você expôs na API pública (em `__init__.py`).
 
-### Exemplo 1: importar os módulos (IBGE e BCB SGS)
+### Exemplo 1: importar os módulos (IBGE, BCB SGS, ComexStat)
 
 ```python
 import data_economist
@@ -38,15 +38,20 @@ meta = data_economist.ibge.metadados(8888)
 
 # BCB SGS: séries do Banco Central (ex.: IPCA, código 433)
 dados = data_economist.bcb_sgs.get(433)
+
+# ComexStat: comércio exterior — por filtro guardado (ID ou URL) ou get_general
+dados = data_economist.comexstat.get_by_filter(146862)
+# ou: data_economist.comexstat.get_general("export", "cuciGroup", ["281b"], "metricFOB")
 ```
 
 ### Exemplo 2: importar um módulo específico
 
 ```python
-from data_economist import ibge, bcb_sgs
+from data_economist import ibge, bcb_sgs, comexstat
 
 dados_sidra = ibge.get(8888, n=(3, "all"), v=12606, p="last")
 dados_ipca = bcb_sgs.get(433, "2020-01-01", "2025-01-01")
+dados_comex = comexstat.get_by_filter("https://comexstat.mdic.gov.br/pt/geral/146862")
 ```
 
 ### Exemplo 3: verificar versão

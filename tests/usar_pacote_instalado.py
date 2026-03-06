@@ -1,12 +1,19 @@
 """
 Teste usando o pacote data_economist como se estivesse instalado via pip.
 
-Requisito: pip install data-economist  (ou do Test PyPI para ter bcb_sgs na 0.2.0+)
+Requisito: pip install -e .  (na raiz do projeto) para usar a versão local.
 
-Execução: python tests/usar_pacote_instalado.py
+Execução (na raiz do projeto): python tests/usar_pacote_instalado.py
 """
 
+import os
 import sys
+
+# Garantir que o pacote local (src) é usado quando se executa da raiz do projeto
+_raiz = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+_src = os.path.join(_raiz, "src")
+if os.path.isdir(_src) and _src not in sys.path:
+    sys.path.insert(0, _src)
 
 # ---------------------------------------------------------------------------
 # 1) Versão e import
@@ -177,17 +184,74 @@ except Exception as e:
 print()
 
 # ---------------------------------------------------------------------------
-# 11) Resumo final
+# 11) ComexStat — comexstat.get(body), get_general, get_filter, get_by_filter
 # ---------------------------------------------------------------------------
 print("=" * 60)
-print("11) Resumo")
+print("11) ComexStat — get(body), get_general, get_filter, get_by_filter")
+print("=" * 60)
+
+try:
+    from data_economist import comexstat
+
+    # POST (documentação oficial) — pode devolver data vazia conforme filtro
+    body = {
+        "flow": "export",
+        "monthDetail": False,
+        "period": {"from": "2018-01", "to": "2018-01"},
+        "filters": [{"filter": "state", "values": [26]}],
+        "details": ["country", "state"],
+        "metrics": ["metricFOB", "metricKG"],
+    }
+    resultado = comexstat.get(body, timeout=60)
+    print(f"  get(body): tipo={type(resultado).__name__}, registros em 'data'={len(resultado.get('data', []))}")
+
+    # GET /general com mapeamentos do notebook — dados em resultado["data"]["list"]
+    dados = comexstat.get_general("export", "cuciGroup", ["281b"], "metricFOB", timeout=60)
+    data_list = dados.get("data", {})
+    data_list = data_list.get("list", data_list) if isinstance(data_list, dict) else (dados.get("list") or dados)
+    n = len(data_list) if isinstance(data_list, list) else 0
+    print(f"  get_general('export', 'cuciGroup', ['281b'], 'metricFOB'): {n} registros")
+    if n > 0 and isinstance(data_list, list) and isinstance(data_list[0], dict):
+        print(f"  Campos do 1º registro: {list(data_list[0].keys())[:8]}")
+
+    # GET /general — import chapter4 2603 (minério de cobre)
+    dados2 = comexstat.get_general("import", "chapter4", ["2603"], "metricKG", timeout=60)
+    data_list2 = dados2.get("data", {})
+    data_list2 = data_list2.get("list", data_list2) if isinstance(data_list2, dict) else (dados2.get("list") or dados2)
+    n2 = len(data_list2) if isinstance(data_list2, list) else 0
+    print(f"  get_general('import', 'chapter4', ['2603'], 'metricKG'): {n2} registros")
+
+    # Filtro guardado no site — por ID ou URL
+    filtro = comexstat.get_filter(146862, timeout=30)
+    print(f"  get_filter(146862): id={filtro.get('data', {}).get('id')}, filter length={len(filtro.get('data', {}).get('filter', ''))}")
+
+    dados_filtro = comexstat.get_by_filter(146862, timeout=90)
+    list_filtro = (dados_filtro.get("data") or {}).get("list", [])
+    print(f"  get_by_filter(146862): {len(list_filtro)} registros (mesmo que GET /general com esse filtro)")
+
+    dados_url = comexstat.get_by_filter("https://comexstat.mdic.gov.br/pt/geral/146862", timeout=90)
+    list_url = (dados_url.get("data") or {}).get("list", [])
+    print(f"  get_by_filter(URL .../geral/146862): {len(list_url)} registros")
+
+    print("OK — comexstat.get, get_general, get_filter, get_by_filter.")
+except ImportError as e:
+    print(f"(ImportError: {e}. Execute na raiz do projeto: pip install -e .)")
+except Exception as e:
+    print(f"Erro: {type(e).__name__}: {e}")
+print()
+
+# ---------------------------------------------------------------------------
+# 12) Resumo final
+# ---------------------------------------------------------------------------
+print("=" * 60)
+print("12) Resumo")
 print("=" * 60)
 print("Pacote data_economist utilizado com sucesso (instalado via pip).")
 print("IBGE: metadados, get(), url() — OK.")
 if hasattr(data_economist, "bcb_sgs"):
     print("BCB SGS: get(codigo, date_init, date_end) — OK.")
-else:
-    print("BCB SGS: não disponível (instale versão 0.2.0+ do Test PyPI ou do código).")
+if hasattr(data_economist, "comexstat"):
+    print("ComexStat: get(body), get_general(...), get_filter(id), get_by_filter(id|url) — OK.")
 print()
 sys.exit(0)
 

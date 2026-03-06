@@ -63,8 +63,34 @@ dados = bcb_sgs.get(433, "2020-01-01", "2025-01-01")  # só o intervalo 2020–2
 # Cada item: {"data": "DD/MM/YYYY", "valor": "..."}
 ```
 
-Documentação completa da fonte BCB SGS: [docs/fonte-bcb-sgs.md](docs/fonte-bcb-sgs.md).  
-Outras fontes (BCE, Eurostat, IMF) serão documentadas em [docs/](docs/).
+Documentação completa da fonte BCB SGS: [docs/fonte-bcb-sgs.md](docs/fonte-bcb-sgs.md).
+
+### Fonte ComexStat (MDIC — comércio exterior)
+
+```python
+from data_economist import comexstat
+
+# POST /historical-data — body no padrão da documentação oficial
+body = {
+    "flow": "export",
+    "monthDetail": False,
+    "period": {"from": "2018-01", "to": "2018-01"},
+    "filters": [{"filter": "state", "values": [26]}],
+    "details": ["country", "state"],
+    "metrics": ["metricFOB", "metricKG"],
+}
+resultado = comexstat.get(body)
+
+# GET /general — por CUCI Grupo ou posição SH4 (dados em resultado["data"]["list"])
+dados = comexstat.get_general("export", "cuciGroup", ["281b"], "metricFOB")
+
+# Filtro guardado no site — por ID ou URL da página geral
+dados = comexstat.get_by_filter(146862)
+dados = comexstat.get_by_filter("https://comexstat.mdic.gov.br/pt/geral/146862")
+registos = dados["data"]["list"]
+```
+
+Documentação completa: [docs/fonte-comexstat.md](docs/fonte-comexstat.md). API oficial: [ComexStat MDIC](https://api-comexstat.mdic.gov.br/docs).
 
 ---
 
@@ -87,6 +113,8 @@ data_economist/
 - [Índice da documentação](docs/README.md)
 - [Fonte IBGE (get e metadados)](docs/fonte-ibge.md)
 - [Fonte BCB SGS (Banco Central — séries temporais)](docs/fonte-bcb-sgs.md)
+- [Fonte ComexStat (MDIC — comércio exterior)](docs/fonte-comexstat.md)
+- [Plano ComexStat (MDIC)](docs/planos/plano-comexstat.md)
 - [Guia de publicação no PyPI](docs/guia-publicacao-pacote.md)
 - [Estrutura do projeto](docs/estrutura-projeto.md)
 - [Uso pelo utilizador](docs/uso-pelo-utilizador.md)
