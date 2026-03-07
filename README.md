@@ -1,6 +1,11 @@
 # data_economist
 
-Pacote Python para **analistas** e **consultoria económica**: funções para baixar dados de fontes económicas de forma fácil. Pensado para ser usado como biblioteca instalável por qualquer pessoa da área.
+Pacote Python para **analistas** e **consultoria económica** com duas vertentes:
+
+1. **Fontes de dados** — obter dados de fontes públicas: **IBGE**, **Banco Central** (BCB SGS), **ComexStat** (MDIC) e **EIA** (Energy Information Administration).
+2. **Funcionalidades** — ferramentas de análise, como **dessazonalização** de séries temporais com **X-13ARIMA-SEATS**.
+
+Pensado para ser usado como biblioteca instalável por qualquer pessoa da área.
 
 ---
 
@@ -10,6 +15,8 @@ Pacote Python para **analistas** e **consultoria económica**: funções para ba
 Desenvolvedor há mais de 10 anos, formado em Ciência da Computação.  
 E-mail: [uira182@hotmail.com](mailto:uira182@hotmail.com)  
 Telefone: +55 18 98151-7906  
+
+Estamos **abertos a melhorias**. Se tiver ideias ou sugestões, pode entrar em contacto pelo e-mail acima ou abrindo uma Issue / Pull Request no [repositório no GitHub](https://github.com/uiradesouza/data_economist).
 
 ---
 
@@ -31,7 +38,9 @@ pip install -e .
 
 ## Uso
 
-### Fonte IBGE (SIDRA e metadados)
+### Fontes de dados
+
+#### IBGE (SIDRA e metadados)
 
 ```python
 from data_economist import ibge
@@ -46,9 +55,9 @@ meta = ibge.metadados(8888)
 # meta["nome"], meta["variaveis"], meta["classificacoes"], meta["periodicidade"], etc.
 ```
 
-Documentação completa da fonte IBGE: [docs/fonte-ibge.md](docs/fonte-ibge.md).
+Documentação: [docs/fonte-ibge.md](docs/fonte-ibge.md).
 
-### Fonte BCB SGS (Banco Central — séries temporais)
+#### BCB SGS (Banco Central — séries temporais)
 
 ```python
 from data_economist import bcb_sgs
@@ -63,9 +72,9 @@ dados = bcb_sgs.get(433, "2020-01-01", "2025-01-01")  # só o intervalo 2020–2
 # Cada item: {"data": "DD/MM/YYYY", "valor": "..."}
 ```
 
-Documentação completa da fonte BCB SGS: [docs/fonte-bcb-sgs.md](docs/fonte-bcb-sgs.md).
+Documentação: [docs/fonte-bcb-sgs.md](docs/fonte-bcb-sgs.md).
 
-### Fonte ComexStat (MDIC — comércio exterior)
+#### ComexStat (MDIC — comércio exterior)
 
 ```python
 from data_economist import comexstat
@@ -90,9 +99,9 @@ dados = comexstat.get_by_filter("https://comexstat.mdic.gov.br/pt/geral/146862")
 registos = dados["data"]["list"]
 ```
 
-Documentação completa: [docs/fonte-comexstat.md](docs/fonte-comexstat.md). API oficial: [ComexStat MDIC](https://api-comexstat.mdic.gov.br/docs).
+Documentação: [docs/fonte-comexstat.md](docs/fonte-comexstat.md). API oficial: [ComexStat MDIC](https://api-comexstat.mdic.gov.br/docs).
 
-### Fonte EIA (U.S. Energy Information Administration)
+#### EIA (U.S. Energy Information Administration)
 
 Requer **token de API** no ficheiro `.env`: `TOKEN_EIA=seu_token` (obtenha em [eia.gov/opendata/register.php](https://www.eia.gov/opendata/register.php)).
 
@@ -110,7 +119,30 @@ dados = eia.get_petroleum("pri/spt", "EER_EPMRU_PF4_RGC_DPG", "daily")
 tudo = eia.get_by_landing("petroleo", "monthly")  # dict série → lista de registos
 ```
 
-Documentação completa: [docs/fonte-eia.md](docs/fonte-eia.md).
+Documentação: [docs/fonte-eia.md](docs/fonte-eia.md).
+
+### Funcionalidades
+
+#### Dessazonalização (X-13ARIMA-SEATS)
+
+O módulo **x13** não é uma fonte de dados: é uma **funcionalidade** para ajuste sazonal de séries que já tenhas (por exemplo obtidas do BCB ou do IBGE). Requer **x13binary** (`pip install x13binary`) e, na primeira utilização, `x13.init(project_root=raiz)`.
+
+```python
+from data_economist import bcb_sgs, x13
+import pandas as pd
+
+dados = bcb_sgs.get(433)  # IPCA
+df = pd.DataFrame(dados)
+df["data"] = pd.to_datetime(df["data"], format="%d/%m/%Y")
+serie = df.set_index("data")["valor"].astype(float)
+serie = serie.resample("ME").last().dropna()
+
+x13.init(project_root=".")  # uma vez por projeto
+modelo = x13.seas(serie, title="IPCA")
+valor_dessaz = x13.final(modelo)  # série dessazonalizada
+```
+
+Documentação: [docs/fonte-x13.md](docs/fonte-x13.md) (requisitos, API, diagnósticos).
 
 ---
 
@@ -131,10 +163,8 @@ data_economist/
 ## Documentação
 
 - [Índice da documentação](docs/README.md)
-- [Fonte IBGE (get e metadados)](docs/fonte-ibge.md)
-- [Fonte BCB SGS (Banco Central — séries temporais)](docs/fonte-bcb-sgs.md)
-- [Fonte ComexStat (MDIC — comércio exterior)](docs/fonte-comexstat.md)
-- [Fonte EIA (U.S. Energy Information Administration)](docs/fonte-eia.md)
+- **Fontes de dados:** [IBGE](docs/fonte-ibge.md) · [BCB SGS](docs/fonte-bcb-sgs.md) · [ComexStat](docs/fonte-comexstat.md) · [EIA](docs/fonte-eia.md)
+- **Funcionalidades:** [Dessazonalização X-13](docs/fonte-x13.md)
 - [Plano ComexStat (MDIC)](docs/planos/plano-comexstat.md)
 - [Guia de publicação no PyPI](docs/guia-publicacao-pacote.md)
 - [Estrutura do projeto](docs/estrutura-projeto.md)
