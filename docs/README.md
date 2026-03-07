@@ -1,15 +1,31 @@
 # Documentação — data_economist
 
-Bem-vindo à documentação do **data_economist**, um pacote Python para baixar dados de fontes económicas de forma fácil, pensado para ser publicado e usado pela comunidade.
+Bem-vindo à documentação do **data_economist**. O pacote oferece:
+
+- **Fontes de dados** — obter dados de fontes públicas (IBGE, Banco Central, ComexStat, EIA).
+- **Funcionalidades** — ferramentas de análise, como **dessazonalização** de séries com X-13ARIMA-SEATS (o X-13 não é uma fonte; é uma funcionalidade aplicada a séries que já tenhas).
 
 ## Conteúdo da documentação
 
+### Fontes de dados
+
 | Documento | Descrição |
 |----------|-----------|
-| [Fonte IBGE](fonte-ibge.md) | Documentação do módulo **ibge**: `get(t,n,v,p,c)`, `url()`, `metadados(tabela)` |
-| [Fonte BCB SGS](fonte-bcb-sgs.md) | Documentação do módulo **bcb_sgs**: `get(codigo, date_init, date_end)` — séries do Banco Central (SGS) |
-| [Fonte ComexStat](fonte-comexstat.md) | Documentação do módulo **comexstat**: `get(body)`, `get_general(...)`, `get_filter(id)`, `get_by_filter(id\|url)` — comércio exterior (MDIC) |
-| [Fonte EIA](fonte-eia.md) | Documentação do módulo **eia**: `get`, `get_data`, `get_steo`, `get_petroleum`, `get_by_landing` — dados energéticos; requer **TOKEN_EIA** no .env |
+| [Fonte IBGE](fonte-ibge.md) | Módulo **ibge**: `get(t,n,v,p,c)`, `url()`, `metadados(tabela)` |
+| [Fonte BCB SGS](fonte-bcb-sgs.md) | Módulo **bcb_sgs**: `get(codigo, date_init, date_end)` — séries do Banco Central (SGS) |
+| [Fonte ComexStat](fonte-comexstat.md) | Módulo **comexstat**: `get(body)`, `get_general(...)`, `get_by_filter(id\|url)` — comércio exterior (MDIC) |
+| [Fonte EIA](fonte-eia.md) | Módulo **eia**: `get_data`, `get_steo`, `get_petroleum`, `get_by_landing` — dados energéticos; requer **TOKEN_EIA** no .env |
+
+### Funcionalidades
+
+| Documento | Descrição |
+|----------|-----------|
+| [Dessazonalização X-13](fonte-x13.md) | Módulo **x13**: `init`, `seas`, `final`, `trend`, `udg`, `summary` — ajuste sazonal X-13ARIMA-SEATS (não é fonte de dados); requer **x13binary** |
+
+### Outros
+
+| Documento | Descrição |
+|----------|-----------|
 | [Antes do commit](antes-do-commit.md) | O que não deve ir para o GitHub e verificação antes do push / PyPI |
 | [Guia de publicação do pacote](guia-publicacao-pacote.md) | Como criar, empacotar e publicar o pacote para a comunidade (PyPI, etc.) |
 | [Estrutura do projeto](estrutura-projeto.md) | Estrutura de pastas e ficheiros recomendada para o pacote |
@@ -25,9 +41,12 @@ O projeto é **livre** (código aberto, licença MIT). O mantenedor **aprova os 
 
 **Configuração e token PyPI:** ver [config/README.md](../config/README.md) na pasta `config/` para onde guardar o token e como usá-lo na publicação.
 
+Estamos **abertos a melhorias**. Se tiver ideias, sugestões ou quiser reportar um problema, entre em contacto através do [repositório no GitHub](https://github.com/uiradesouza/data_economist) (Issues ou Pull Requests) ou por e-mail (ver [README principal](../README.md)).
+
 ## Objetivo do projeto
 
-- **Funções** para descarregar dados de fontes económicas (BCE, Eurostat, IMF, etc.).
+- **Fontes de dados** — funções para obter dados de fontes públicas (IBGE, Banco Central, ComexStat, EIA).
+- **Funcionalidades** — ferramentas de análise, como dessazonalização (X-13ARIMA-SEATS).
 - **Publicação** como pacote Python instalável via `pip`.
 - **Comunidade** — qualquer pessoa pode instalar e usar: `pip install data-economist`.
 

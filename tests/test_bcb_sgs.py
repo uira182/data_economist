@@ -1,9 +1,16 @@
 """Testes do módulo BCB SGS (Banco Central — Sistema Gerenciador de Séries)."""
 
+import sys
+from pathlib import Path
+
 import pytest
 import requests
 
+# Garantir que o src local está no path (evita usar versão já instalada)
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
 from data_economist import bcb_sgs
+from data_economist.bcb_sgs import BCBSGSError
 
 
 # Série real: IPCA (código 433)
@@ -91,3 +98,38 @@ def test_get_só_date_end():
     from datetime import datetime
     dt = datetime.strptime(ultima_data, "%d/%m/%Y")
     assert dt.year <= 2000, "Com date_end=2000-01-06 o último ponto deve ser até 2000"
+
+
+def test_get_rate_limit_429_levanta_erro_amigavel(monkeypatch):
+    """Quando a API devolve 429, devemos levantar BCBSGSError com contexto claro."""
+
+    class FakeResponse:
+        status_code = 429
+
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return []
+
+    def fake_get(self, url, timeout=30):
+        return FakeResponse()
+
+    monkeypatch.setattr(requests.Session, "get", fake_get)
+
+    with pytest.raises(BCBSGSError) as exc:
+        bcb_sgs.get(433, date_init="2020-01-01", date_end="2020-12-31", timeout=1, retry_total=0)
+    assert "429" in str(exc.value)
+
+
+def test_get_falha_dns_levanta_erro_amigavel(monkeypatch):
+    """Falha de DNS/conexão deve virar BCBSGSError com mensagem orientativa."""
+
+    def fake_get(self, url, timeout=30):
+        raise requests.exceptions.ConnectionError("getaddrinfo failed")
+
+    monkeypatch.setattr(requests.Session, "get", fake_get)
+
+    with pytest.raises(BCBSGSError) as exc:
+        bcb_sgs.get(433, date_init="2020-01-01", date_end="2020-12-31", timeout=1, retry_total=0)
+    assert "Falha de conexão" in str(exc.value)

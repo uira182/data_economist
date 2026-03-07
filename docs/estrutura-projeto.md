@@ -55,16 +55,18 @@ No `src/data_economist/__init__.py` convém expor as funções que quer que a co
 
 ```python
 # src/data_economist/__init__.py
-"""data_economist: funções para baixar dados de fontes económicas."""
+"""data_economist: fontes de dados (IBGE, BCB, ComexStat, EIA) e funcionalidades (ex.: dessazonalização X-13)."""
 
-__version__ = "0.1.0"
+__version__ = "0.5.0"
 
-from data_economist.bce import baixar_taxas_bce
-from data_economist.eurostat import baixar_indicador_eurostat
+from data_economist import ibge, bcb_sgs, comexstat, eia, x13
 
 __all__ = [
-    "baixar_taxas_bce",
-    "baixar_indicador_eurostat",
+    "ibge",
+    "bcb_sgs",
+    "comexstat",
+    "eia",
+    "x13",
     "__version__",
 ]
 ```
@@ -81,13 +83,19 @@ from data_economist import baixar_taxas_bce
 
 ---
 
-## Organização por fonte económica
+## Organização: fontes de dados e funcionalidades
 
-As funções estão organizadas por fonte em módulos:
+**Fontes de dados** (obter dados de APIs públicas):
 
 - **`data_economist/ibge.py`** — API SIDRA e API de Agregados do IBGE: `get()`, `url()`, `metadados()`. Ver [Fonte IBGE](fonte-ibge.md).
 - **`data_economist/bcb_sgs.py`** — Séries temporais do Banco Central (SGS): `get(codigo, date_init, date_end)`. Ver [Fonte BCB SGS](fonte-bcb-sgs.md).
+- **`data_economist/comexstat.py`** — ComexStat (MDIC). Ver [Fonte ComexStat](fonte-comexstat.md).
+- **`data_economist/eia.py`** — EIA (dados energéticos). Ver [Fonte EIA](fonte-eia.md).
 - **`data_economist/fontes/sidra.py`** — Reexporta funções do ibge para uso por fonte.
+
+**Funcionalidades** (análise/processamento, não fontes):
+
+- **`data_economist/x13/`** — Dessazonalização X-13ARIMA-SEATS: `seas()`, `final()`, `trend()`, etc. Ver [Dessazonalização X-13](fonte-x13.md). O X-13 não obtém dados da internet; aplica-se a séries que já tenhas (ex.: do BCB ou IBGE).
 
 Outras fontes (BCE, Eurostat, IMF) podem ser adicionadas em módulos separados. No `__init__.py` importe e liste em `__all__` os módulos e funções estáveis e públicas.
 

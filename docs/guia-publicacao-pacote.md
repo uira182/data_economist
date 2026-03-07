@@ -49,7 +49,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "data-economist"
 version = "0.1.0"
-description = "Funções para baixar dados de fontes económicas de forma fácil"
+description = "Obter dados de fontes públicas (IBGE, BCB, ComexStat, EIA) e funcionalidades como dessazonalização (X-13)."
 readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "Seu Nome", email = "seu@email.com"}]
