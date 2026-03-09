@@ -15,5 +15,7 @@ import data_economist.bcb_sgs as bcb_sgs
 import data_economist.comexstat as comexstat
 import data_economist.eia as eia
 import data_economist.x13 as x13
+import data_economist.tratamento as tratamento
+import data_economist.estatistica as estatistica
 
-__all__ = ["__version__", "get", "url", "ibge", "bcb_sgs", "comexstat", "eia", "x13"]
+__all__ = ["__version__", "get", "url", "ibge", "bcb_sgs", "comexstat", "eia", "x13", "tratamento", "estatistica"]

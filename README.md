@@ -3,7 +3,7 @@
 Pacote Python para **analistas** e **consultoria económica** com duas vertentes:
 
 1. **Fontes de dados** — obter dados de fontes públicas: **IBGE**, **Banco Central** (BCB SGS), **ComexStat** (MDIC) e **EIA** (Energy Information Administration).
-2. **Funcionalidades** — ferramentas de análise, como **dessazonalização** de séries temporais com **X-13ARIMA-SEATS**.
+2. **Funcionalidades** — ferramentas de análise: **dessazonalização** X-13ARIMA-SEATS, **tratamento de séries** (filtros, suavização, frequência, whitening) e **estatística** (descritiva, normalidade, correlação, testes de hipótese, contingência, PCA e fatorial).
 
 Pensado para ser usado como biblioteca instalável por qualquer pessoa da área.
 
@@ -123,6 +123,75 @@ Documentação: [docs/fonte-eia.md](docs/fonte-eia.md).
 
 ### Funcionalidades
 
+#### Tratamento de séries temporais
+
+O módulo **tratamento** aplica transformações e análises sobre séries que já existem.
+
+```python
+from data_economist import tratamento
+
+# Filtros de ciclo e tendência
+r = tratamento.hp(serie)          # Hodrick-Prescott
+r = tratamento.bk(serie)          # Baxter-King
+r = tratamento.cf(serie)          # Christiano-Fitzgerald
+print(r.ciclo, r.tendencia)
+
+# Suavização exponencial
+r = tratamento.holt_winters(serie_mensal)   # Holt-Winters (m inferido automaticamente)
+r = tratamento.ets(serie)                   # ETS automático (seleciona por AIC)
+print(r.suavizado)
+
+# Conversão de frequência
+mensal  = tratamento.para_frequencia(serie_diaria, "ME", metodo="mean")
+diario  = tratamento.para_frequencia(serie_mensal, "D",  metodo="cubic")
+
+# Whitening AR(p)
+r = tratamento.whitening(serie)
+print(r.lags, r.residuos)
+```
+
+Documentação: [docs/fonte-tratamento.md](docs/fonte-tratamento.md).
+
+#### Estatística
+
+O módulo **estatistica** oferece análises estatísticas completas sobre séries e DataFrames.
+
+```python
+import data_economist.estatistica as est
+
+# Descritiva
+r = est.resumo(serie)
+print(r.media, r.desvio_padrao, r.jb_pvalue)
+
+# Normalidade
+print(est.lilliefors(serie))
+print(est.anderson_darling(serie))
+
+# Correlação
+r = est.pearson(x, y)
+print(f"r={r.coeficiente:.3f}  p={r.pvalue:.4f}  IC={r.intervalo_confianca}")
+cov = est.covariancia(df)
+corr = est.matriz_correlacao(df, metodo="spearman")
+
+# Testes de hipótese
+print(est.ttest(grupo_a, grupo_b))
+print(est.anova(g1, g2, g3))
+print(est.mann_whitney(x, y))
+print(est.levene(g1, g2, g3))
+
+# Tabelas de contingência
+r = est.cruzar(df["produto"], df["regiao"])
+print(r.v_cramer, r.chi2_pvalue)
+
+# Análise multivariada
+r = est.pca(df, n_componentes=3)
+print(r.variancia_explicada)
+r = est.fatorial(df, n_fatores=2, rotacao="varimax")
+print(r.cargas)
+```
+
+Documentação: [docs/fonte-estatistica.md](docs/fonte-estatistica.md).
+
 #### Dessazonalização (X-13ARIMA-SEATS)
 
 O módulo **x13** não é uma fonte de dados: é uma **funcionalidade** para ajuste sazonal de séries que já tenhas (por exemplo obtidas do BCB ou do IBGE). Requer **x13binary** (`pip install x13binary`) e, na primeira utilização, `x13.init(project_root=raiz)`.
@@ -164,7 +233,7 @@ data_economist/
 
 - [Índice da documentação](docs/README.md)
 - **Fontes de dados:** [IBGE](docs/fonte-ibge.md) · [BCB SGS](docs/fonte-bcb-sgs.md) · [ComexStat](docs/fonte-comexstat.md) · [EIA](docs/fonte-eia.md)
-- **Funcionalidades:** [Dessazonalização X-13](docs/fonte-x13.md)
+- **Funcionalidades:** [Dessazonalização X-13](docs/fonte-x13.md) · [Tratamento de séries](docs/fonte-tratamento.md) · [Estatística](docs/fonte-estatistica.md)
 - [Plano ComexStat (MDIC)](docs/planos/plano-comexstat.md)
 - [Guia de publicação no PyPI](docs/guia-publicacao-pacote.md)
 - [Estrutura do projeto](docs/estrutura-projeto.md)

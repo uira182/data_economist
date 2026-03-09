@@ -252,6 +252,46 @@ def _parse_series_from_html(html_path: Path, index: pd.DatetimeIndex) -> pd.Seri
         return None
 
 
+def _read_seats_txt(path: Path, index: pd.DatetimeIndex) -> pd.Series | None:
+    """
+    Lê um arquivo de texto gerado pelo X-13 via seats{save=(s11 s12 s13)}.
+
+    Formato esperado: uma observação por linha, com valores numéricos separados
+    por espaço. Pode ter cabeçalho, linhas em branco ou comentários (ignorados).
+    Suporta dois formatos:
+      - "YYYY.MM  valor"  (ex: "2020.01  0.21345")
+      - apenas o valor numérico por linha
+
+    Retorna pd.Series alinhada com index, ou None se leitura falhar.
+    """
+    if not path.is_file():
+        return None
+    try:
+        lines = path.read_text(encoding="utf-8", errors="ignore").splitlines()
+    except OSError:
+        return None
+
+    vals: list[float] = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        # Ignorar linhas de cabeçalho/texto (não numéricas)
+        parts = line.split()
+        # Tentar o último token como valor (cobre "YYYY.MM  valor" e só "valor")
+        for token in reversed(parts):
+            try:
+                v = float(token)
+                vals.append(v)
+                break
+            except ValueError:
+                continue
+
+    if len(vals) < len(index):
+        return None
+    return pd.Series(vals[: len(index)], index=index, dtype=float)
+
+
 def parse_output(
     work_dir: Path | str,
     base_name: str,
@@ -266,6 +306,11 @@ def parse_output(
       - irregular: irregular (ou None)
       - udg: dict de diagnósticos
       - messages: lista de mensagens/avisos
+
+    Estratégia de leitura (ordem de preferência):
+    1. Arquivos de texto salvos pelo seats{save=(s11 s12 s13)} — precisão total.
+    2. Tabelas do HTML — fallback, mas pode truncar casas decimais para séries
+       de pequena magnitude (ex.: IPCA variação mensal em %).
     """
     work_dir = Path(work_dir)
     base = base_name.replace(".spc", "").replace(".udg", "").replace(".html", "")
@@ -288,7 +333,18 @@ def parse_output(
     if not isinstance(index, pd.DatetimeIndex):
         index = pd.DatetimeIndex(pd.period_range(start="2000-01", periods=len(original_series), freq="ME"))
 
-    # Extrair final (s11), trend (s12), irregular (s13) do HTML
+    # --- Prioridade 1: arquivos de texto gerados por seats{save=(s11 s12 s13)} ---
+    final_txt = _read_seats_txt(work_dir / f"{base}.s11", index)
+    trend_txt = _read_seats_txt(work_dir / f"{base}.s12", index)
+    irregular_txt = _read_seats_txt(work_dir / f"{base}.s13", index)
+
+    if final_txt is not None:
+        result["final"] = final_txt
+        result["trend"] = trend_txt      # pode ser None se s12 não existir
+        result["irregular"] = irregular_txt
+        return result
+
+    # --- Prioridade 2: tabelas HTML ---
     html_path = work_dir / f"{base}.html"
     final_s, trend_s, irregular_s = _parse_html_components(html_path, index)
     if final_s is not None:
@@ -297,7 +353,6 @@ def parse_output(
         result["irregular"] = irregular_s
     else:
         result["final"] = original_series.copy()
-        html_path = work_dir / f"{base}.html"
         path_msg = str(html_path.resolve()) if html_path.is_file() else f"(ficheiro não encontrado: {html_path})"
         result["messages"].append(
             "Componentes (final/trend/irregular) não extraídos do output; final=original. "

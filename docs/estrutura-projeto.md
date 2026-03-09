@@ -95,7 +95,9 @@ from data_economist import baixar_taxas_bce
 
 **Funcionalidades** (análise/processamento, não fontes):
 
-- **`data_economist/x13/`** — Dessazonalização X-13ARIMA-SEATS: `seas()`, `final()`, `trend()`, etc. Ver [Dessazonalização X-13](fonte-x13.md). O X-13 não obtém dados da internet; aplica-se a séries que já tenhas (ex.: do BCB ou IBGE).
+- **`data_economist/x13/`** — Dessazonalização X-13ARIMA-SEATS: `seas()`, `final()`, `trend()`, etc. Ver [Dessazonalização X-13](fonte-x13.md).
+- **`data_economist/tratamento/`** — Filtros (HP, BK, CF), suavização exponencial (SES, DES, Holt, Holt-Winters, ETS), conversão de frequência e whitening AR(p). Ver [Tratamento de séries](fonte-tratamento.md).
+- **`data_economist/estatistica/`** — Estatística descritiva, normalidade, correlação, testes de hipótese, contingência, PCA e análise fatorial. Ver [Estatística](fonte-estatistica.md).
 
 Outras fontes (BCE, Eurostat, IMF) podem ser adicionadas em módulos separados. No `__init__.py` importe e liste em `__all__` os módulos e funções estáveis e públicas.
 
