@@ -155,7 +155,7 @@ def test_get_by_landing_petroleo_weekly_chama_get_petroleum():
 
 
 def test_series_steo_and_petroleum_mapping():
-    """Mapeamentos SERIES_STEO e SERIES_PETROLEUM contêm as séries do landing."""
+    """Mapeamentos SERIES_STEO e SERIES_PETROLEUM contêm as séries por setor e frequência."""
     assert "PATC_WORLD" in eia.SERIES_STEO["petroleo_monthly"]
     assert "PAPR_OPEC" in eia.SERIES_STEO["petroleo_monthly"]
     assert "NGHHUUS" in eia.SERIES_STEO["quimicos_monthly"]

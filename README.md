@@ -128,7 +128,7 @@ from data_economist import eia
 # Por URL completa
 dados = eia.get_data("https://api.eia.gov/v2/steo/data/?frequency=monthly&...")
 
-# Por parâmetros (STEO e Petroleum — mapeamento landing Databricks)
+# Por parâmetros (STEO e Petroleum)
 dados = eia.get_steo("PATC_WORLD", "monthly")
 dados = eia.get_petroleum("pri/spt", "EER_EPMRU_PF4_RGC_DPG", "daily")
 
@@ -159,7 +159,7 @@ meta = fred.metadados("CPIAUCSL")
 # Busca por texto
 series = fred.buscar("consumer price index", limit=20)
 
-# Séries do notebook de ingestão (mapeamento landing Databricks)
+# Séries de referência por frequência e grupo
 fred.SERIES_FRED["daily"]["pol_mon"]       # DTWEXBGS, VIXCLS, SP500...
 fred.SERIES_FRED["monthly"]["pol_mon"]     # CPIAUCSL, FEDFUNDS, UNRATE...
 fred.SERIES_FRED["monthly"]["min_sid"]     # PPI minério/siderurgia

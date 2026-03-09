@@ -13,7 +13,7 @@ Uso::
     # Por parâmetros (STEO ou Petroleum)
     dados = eia.get_steo("PATC_WORLD", "monthly")
     dados = eia.get_petroleum("pri/spt", "EER_EPMRU_PF4_RGC_DPG", "daily")
-    # Mapeamento landing (setor + frequência): eia.SERIES_STEO, eia.SERIES_PETROLEUM
+    # Mapeamento setor + frequência: eia.SERIES_STEO, eia.SERIES_PETROLEUM
 """
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ import requests
 _BASE = "https://api.eia.gov/v2"
 
 # ---------------------------------------------------------------------------
-# Mapeamento landing (Databricks) — setor × frequência → séries
+# Mapeamento setor × frequência → séries
 # Usar com get_steo(series_id, frequency) ou get_petroleum(route, series, frequency)
 # ---------------------------------------------------------------------------
 SERIES_STEO: dict[str, list[str]] = {
@@ -245,7 +245,7 @@ def get_steo(
     Obtém dados do endpoint **STEO** (Short-Term Energy Outlook) por série e frequência.
 
     Equivalente às URLs do tipo ``/v2/steo/data/?frequency=monthly&facets[seriesId][]=PATC_WORLD&...``
-    usadas no mapeamento de landing (petróleo mensal, químicos mensal/trimestral/anual, min_sid).
+    usadas no mapeamento (petróleo mensal, químicos mensal/trimestral/anual, min_sid).
 
     Parâmetros
     ----------
@@ -271,7 +271,7 @@ def get_steo(
     --------
     >>> dados = eia.get_steo("PATC_WORLD", "monthly")
     >>> dados = eia.get_steo("NGHHUUS", "quarterly", length=100)
-    >>> # Séries do landing: eia.SERIES_STEO["petroleo_monthly"]
+    >>> # Séries: eia.SERIES_STEO["petroleo_monthly"]
     """
     url = _build_steo_url(series_id, frequency, offset=offset, length=length)
     return get_data(url, timeout=timeout, api_key=api_key)
@@ -290,7 +290,7 @@ def get_petroleum(
     Obtém dados do endpoint **Petroleum** por rota, série e frequência.
 
     Equivalente às URLs do tipo ``/v2/petroleum/cons/wpsup/data/?frequency=weekly&facets[series][]=WGFUPUS2&...``
-    usadas no mapeamento de landing (petróleo semanal e diário).
+    usadas no mapeamento (petróleo semanal e diário).
 
     Parâmetros
     ----------
@@ -318,7 +318,7 @@ def get_petroleum(
     --------
     >>> dados = eia.get_petroleum("pri/spt", "EER_EPMRU_PF4_RGC_DPG", "daily")
     >>> dados = eia.get_petroleum("cons/wpsup", "WGFUPUS2", "weekly")
-    >>> # Pares (route, series) do landing: eia.SERIES_PETROLEUM["petroleo_weekly"]
+    >>> # Pares (route, series): eia.SERIES_PETROLEUM["petroleo_weekly"]
     """
     url = _build_petroleum_url(route, series, frequency, offset=offset, length=length)
     return get_data(url, timeout=timeout, api_key=api_key)
@@ -331,7 +331,7 @@ def get_by_landing(
     api_key: str | None = None,
 ) -> dict[str, list[dict]]:
     """
-    Obtém todos os dados do mapeamento de landing para um **setor** e **frequência**.
+    Obtém todos os dados do mapeamento para um **setor** e **frequência**.
 
     Usa os dicionários ``SERIES_STEO`` e ``SERIES_PETROLEUM``. Devolve um dicionário
     em que cada chave é um identificador da série e o valor é a lista de registos.

@@ -247,8 +247,6 @@ GET https://api.stlouisfed.org/fred/tags/series
 
 ## 6. Séries de Referência do Notebook de Ingestão
 
-O notebook `[INGESTÃO][LANDING] FRED.ipynb` organiza séries por frequência e grupo temático:
-
 ### Diárias
 | Série | Descrição |
 |---|---|

@@ -19,7 +19,7 @@ Uso::
     # Busca por texto
     series = fred.buscar("consumer price index", limit=20)
 
-    # Séries do notebook de ingestão
+    # Séries de referência por frequência e grupo
     fred.SERIES_FRED["monthly"]["pol_mon"]
 """
 from __future__ import annotations
@@ -43,7 +43,7 @@ _MSG_TOKEN = (
 )
 
 # ---------------------------------------------------------------------------
-# Séries de referência do notebook de ingestão (Databricks)
+# Séries de referência por frequência e grupo temático
 # ---------------------------------------------------------------------------
 SERIES_FRED: dict[str, dict[str, list[str]]] = {
     "daily": {
@@ -111,7 +111,7 @@ SERIES_FRED: dict[str, dict[str, list[str]]] = {
     },
     "yearly": {},
 }
-"""Séries FRED organizadas por frequência e grupo temático (espelha notebook de ingestão)."""
+"""Séries FRED organizadas por frequência e grupo temático."""
 
 
 # ---------------------------------------------------------------------------

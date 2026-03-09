@@ -261,7 +261,7 @@ series = fred.series_release(10, limit=50)
 
 ## Constante `SERIES_FRED`
 
-O módulo expõe a constante `SERIES_FRED` com as séries do notebook de ingestão Databricks, organizadas por frequência e grupo temático:
+O módulo expõe a constante `SERIES_FRED` com séries organizadas por frequência e grupo temático:
 
 ```python
 fred.SERIES_FRED["daily"]["pol_mon"]
@@ -286,7 +286,7 @@ fred.SERIES_FRED["quarterly"]["pol_mon"]
 # ['CIU2013000000000I']  # Custo unitário do trabalho
 ```
 
-Isso permite replicar exatamente o fluxo do Databricks:
+Exemplo de uso:
 
 ```python
 # Coletar todas as séries diárias de política monetária
