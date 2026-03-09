@@ -268,7 +268,7 @@ try:
     dados_pet = eia.get_petroleum("pri/spt", "EER_EPMRU_PF4_RGC_DPG", "daily", length=5, timeout=15)
     print(f"  get_petroleum('pri/spt', 'EER_EPMRU_...', 'daily'): {len(dados_pet)} registros")
 
-    # Mapeamento landing — um setor/frequência (amostra: min_sid mensal = 1 série)
+    # Mapeamento por setor/frequência (amostra: min_sid mensal = 1 série)
     landing = eia.get_by_landing("min_sid", "monthly", timeout=15)
     print(f"  get_by_landing('min_sid', 'monthly'): {len(landing)} série(s), chaves={list(landing.keys())}")
 

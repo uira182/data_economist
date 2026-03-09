@@ -180,7 +180,7 @@ registos = dados["data"]["list"]
 
 ---
 
-## Plano e referências
+## Referências
 
-- Plano de integração e detalhes técnicos: [docs/planos/plano-comexstat.md](planos/plano-comexstat.md).
 - Testes e exemplos de uso: `tests/test_comexstat.py`, `tests/usar_pacote_instalado.py`.
+- API oficial: [ComexStat MDIC](https://api-comexstat.mdic.gov.br/docs).

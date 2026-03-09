@@ -144,10 +144,13 @@ def build_spec(
         parts += ["}"]
 
     # SEATS: pedir tabelas s11 (ajustada), s12 (tendência), s13 (irregular) no output
+    # save= gera arquivos de texto com precisão total (io.s11, io.s12, io.s13)
+    # evita truncamento de casas decimais no HTML para séries de pequena magnitude
     parts += [
         "",
         "seats{",
         "  print=(s11 s12 s13)",
+        "  save=(s11 s12 s13)",
         "}",
     ]
     return "\n".join(parts)

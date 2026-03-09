@@ -41,7 +41,7 @@ data_economist/                    # Raiz do repositório
 | Pasta/ficheiro | Função |
 |----------------|--------|
 | **src/data_economist/** | Todo o código que os utilizadores importam (`import data_economist`). Aqui ficam as funções para baixar dados económicos. |
-| **docs/** | Guias e documentação para quem desenvolve e para quem usa o pacote. |
+| **docs/** | Guias e documentação para quem desenvolve e para quem usa o pacote. Os ficheiros `fonte-*.md` detalham cada módulo; o que precisar de maior destaque pode ser resumido no README.md da raiz. A pasta **docs/planos/** é interna (planos de implementação) e **não sobe no repositório** — está listada no `.gitignore`. |
 | **tests/** | Testes (ex.: pytest). Não são instalados com o pacote, mas são essenciais para qualidade. |
 | **pyproject.toml** | Define nome do pacote, versão, dependências e como construir o pacote para publicação. |
 | **README.md** | Primeira impressão no PyPI e no repositório: instalação, exemplos e links. |
@@ -95,7 +95,11 @@ from data_economist import baixar_taxas_bce
 
 **Funcionalidades** (análise/processamento, não fontes):
 
-- **`data_economist/x13/`** — Dessazonalização X-13ARIMA-SEATS: `seas()`, `final()`, `trend()`, etc. Ver [Dessazonalização X-13](fonte-x13.md). O X-13 não obtém dados da internet; aplica-se a séries que já tenhas (ex.: do BCB ou IBGE).
+- **`data_economist/x13/`** — Dessazonalização X-13ARIMA-SEATS: `seas()`, `final()`, `trend()`, etc. Ver [Dessazonalização X-13](fonte-x13.md).
+- **`data_economist/tratamento/`** — Filtros (HP, BK, CF), suavização exponencial (SES, DES, Holt, Holt-Winters, ETS), conversão de frequência e whitening AR(p). Ver [Tratamento de séries](fonte-tratamento.md).
+- **`data_economist/estatistica/`** — Estatística descritiva, normalidade, correlação, testes de hipótese, contingência, PCA e análise fatorial. Ver [Estatística](fonte-estatistica.md).
+- **`data_economist/modelos/`** — Modelos univariados: AR/MA/ARMA/ARIMA/SARIMA/ARMAX, ARFIMA, auto seleção, ACF/PACF, testes de raiz unitária e previsão. Ver [Modelos de séries temporais](fonte-modelos.md).
+- **`data_economist/regressao/`** — Regressão e equação única: OLS/WLS/NLS, robusta, quantílica, stepwise, PDL, ARDL e TAR/SETAR. Ver [Regressão](fonte-regressao.md).
 
 Outras fontes (BCE, Eurostat, IMF) podem ser adicionadas em módulos separados. No `__init__.py` importe e liste em `__all__` os módulos e funções estáveis e públicas.
 

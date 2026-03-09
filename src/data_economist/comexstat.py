@@ -3,7 +3,7 @@ Módulo ComexStat — Dados de comércio exterior (MDIC).
 
 - **get(body):** POST /historical-data — body no padrão da documentação oficial.
 - **get_general(flow, filter_key, filter_values, metrics):** GET /general — mapeamentos
-  do notebook (cuciGroup, chapter4).
+  cuciGroup, chapter4.
 - **get_filter(filter_id):** GET /filter/{id} — obtém um filtro guardado no site (ex.: 146862).
 - **get_by_filter(filter_id_or_url):** Obtém o filtro pelo ID ou URL (ex. comexstat.mdic.gov.br/.../geral/146862)
   e consulta GET /general com esse filtro, devolvendo os dados.
@@ -41,7 +41,7 @@ _HEADERS = {
     "Referer": "https://comexstat.mdic.gov.br/",
 }
 
-# Mapeamentos do notebook [INGESTAO][LANDING] Comexstat — filter key → (idInput, metadado para filterList)
+# Mapeamentos filter key → (idInput, metadado para filterList)
 _FILTER_METADATA = {
     "cuciGroup": (
         "noCuciPospt",
@@ -130,7 +130,7 @@ def _build_general_payload(
     year_start: str = "1995",
     year_end: str = "2025",
 ) -> dict:
-    """Monta o payload do parâmetro 'filter' para GET /general (formato do notebook)."""
+    """Monta o payload do parâmetro 'filter' para GET /general."""
     type_form = 1 if flow == "export" else 2
     return {
         "yearStart": year_start,
@@ -165,7 +165,7 @@ def get_general(
     timeout: int = 120,
 ) -> dict | list:
     """
-    Consulta dados do ComexStat via GET /general (formato do notebook Databricks).
+    Consulta dados do ComexStat via GET /general.
 
     Usa os mapeamentos do notebook: cuciGroup (ex.: 281b, 672), chapter4 (ex.: 2603).
     Retorna a resposta da API (em geral dict com chave ``data`` contendo os registos).
@@ -175,7 +175,7 @@ def get_general(
     flow : str
         ``"export"`` ou ``"import"``.
     filter_key : str
-        Nome do filtro: ``"cuciGroup"`` ou ``"chapter4"`` (mapeamentos do notebook).
+        Nome do filtro: ``"cuciGroup"`` ou ``"chapter4"``.
     filter_values : list
         Valores do filtro, ex. ``["281b"]``, ``["2603"]``.
     metrics : str

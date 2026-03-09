@@ -6,7 +6,7 @@ O módulo **eia** do data_economist permite consultar dados energéticos da **EI
 - **get(url)** / **get_data(url)** — quando já tem a URL completa do endpoint EIA.
 - **get_steo(series_id, frequency)** — dados STEO (petróleo, químicos, etc.) por série e frequência (monthly/quarterly/annual).
 - **get_petroleum(route, series, frequency)** — dados Petroleum (preços, stocks) por rota, série e frequência (weekly/daily).
-- **get_by_landing(sector, frequency)** — todos os dados do mapeamento de landing (setor + frequência) num único dicionário.
+- **get_by_landing(sector, frequency)** — todos os dados do mapeamento (setor + frequência) num único dicionário.
 
 ---
 
@@ -109,7 +109,7 @@ for r in dados[:5]:
 
 ## eia.get_steo(series_id, frequency="monthly", offset=0, length=5000, ...)
 
-Obtém dados do endpoint **STEO** (Short-Term Energy Outlook) passando apenas o **identificador da série** e a **frequência**. A URL é montada internamente (equivalente ao mapeamento de landing no Databricks).
+Obtém dados do endpoint **STEO** (Short-Term Energy Outlook) passando apenas o **identificador da série** e a **frequência**. A URL é montada internamente.
 
 ### Parâmetros
 
@@ -134,7 +134,7 @@ from data_economist import eia
 
 dados = eia.get_steo("PATC_WORLD", "monthly")
 dados = eia.get_steo("NGHHUUS", "quarterly", length=100)
-# Séries do landing: eia.SERIES_STEO["petroleo_monthly"], eia.SERIES_STEO["quimicos_monthly"], etc.
+# Séries: eia.SERIES_STEO["petroleo_monthly"], eia.SERIES_STEO["quimicos_monthly"], etc.
 ```
 
 ---
@@ -164,14 +164,14 @@ from data_economist import eia
 
 dados = eia.get_petroleum("pri/spt", "EER_EPMRU_PF4_RGC_DPG", "daily")
 dados = eia.get_petroleum("cons/wpsup", "WGFUPUS2", "weekly")
-# Pares (route, series) do landing: eia.SERIES_PETROLEUM["petroleo_weekly"], eia.SERIES_PETROLEUM["petroleo_daily"]
+# Pares (route, series): eia.SERIES_PETROLEUM["petroleo_weekly"], eia.SERIES_PETROLEUM["petroleo_daily"]
 ```
 
 ---
 
 ## eia.get_by_landing(sector, frequency, timeout=30, api_key=None)
 
-Obtém **todos** os dados do mapeamento de landing para um **setor** e **frequência**. Usa internamente `SERIES_STEO` e `SERIES_PETROLEUM` (mesmo mapeamento do notebook Databricks [INGESTAO][LANDING] EIA).
+Obtém **todos** os dados do mapeamento para um **setor** e **frequência**. Usa internamente `SERIES_STEO` e `SERIES_PETROLEUM`.
 
 ### Parâmetros
 
@@ -200,9 +200,9 @@ tudo = eia.get_by_landing("quimicos", "quarterly")
 
 ---
 
-## Mapeamentos (landing Databricks)
+## Mapeamentos
 
-Os dicionários **SERIES_STEO** e **SERIES_PETROLEUM** replicam o mapeamento de URLs por setor e frequência do notebook de landing. Podem ser usados para iterar sobre as séries sem construir URLs à mão.
+Os dicionários **SERIES_STEO** e **SERIES_PETROLEUM** contêm o mapeamento de URLs por setor e frequência. Podem ser usados para iterar sobre as séries sem construir URLs à mão.
 
 | Constante | Conteúdo |
 |-----------|----------|
@@ -231,8 +231,8 @@ for route, series in eia.SERIES_PETROLEUM["petroleo_daily"]:
 | `get_data(url)` | GET à URL EIA; devolve apenas `response.response.data` (lista de registos). |
 | `get_steo(series_id, frequency)` | Dados STEO por série e frequência (monthly/quarterly/annual). |
 | `get_petroleum(route, series, frequency)` | Dados Petroleum por rota, série e frequência (weekly/daily). |
-| `get_by_landing(sector, frequency)` | Todos os dados do mapeamento de landing para setor e frequência. |
+| `get_by_landing(sector, frequency)` | Todos os dados do mapeamento para setor e frequência. |
 
-**Constantes:** `SERIES_STEO`, `SERIES_PETROLEUM` — mapeamento setor × frequência → séries (landing).
+**Constantes:** `SERIES_STEO`, `SERIES_PETROLEUM` — mapeamento setor × frequência → séries.
 
 **Requisito:** `.env` com `TOKEN_EIA=...` (ou variável de ambiente), token obtido em [eia.gov/opendata/register.php](https://www.eia.gov/opendata/register.php).

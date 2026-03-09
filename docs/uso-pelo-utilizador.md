@@ -47,7 +47,95 @@ dados = data_economist.eia.get_steo("PATC_WORLD", "monthly")
 # ou: data_economist.eia.get_by_landing("petroleo", "monthly")
 ```
 
-### Exemplo 2: importar um módulo específico
+### Exemplo 2: tratamento de séries temporais
+
+```python
+from data_economist import bcb_sgs, tratamento
+import pandas as pd
+
+# Obter série do BCB
+dados = bcb_sgs.get(433, "2015-01-01")
+df = pd.DataFrame(dados)
+df["data"] = pd.to_datetime(df["data"], format="%d/%m/%Y")
+serie = df.set_index("data")["valor"].astype(float).resample("ME").last().dropna()
+
+# Filtro HP: separar tendência e ciclo
+r = tratamento.hp(serie)
+print(r.tendencia.tail())
+
+# Suavização Holt-Winters
+r = tratamento.holt_winters(serie)
+print(r.suavizado.tail())
+
+# Converter para frequência trimestral
+trimestral = tratamento.para_frequencia(serie, "QE")
+```
+
+### Exemplo 3: análise estatística
+
+```python
+import data_economist.estatistica as est
+
+# Descritiva completa
+r = est.resumo(serie)
+print(r)  # média, mediana, std, curtose, Jarque-Bera, IQR, ...
+
+# Testar normalidade
+print(est.lilliefors(serie))   # KS corrigido — rejeita ou não H0
+
+# Correlação entre duas séries
+r = est.pearson(serie_a, serie_b)
+print(f"r = {r.coeficiente:.3f}  p = {r.pvalue:.4f}")
+
+# Comparar dois grupos
+r = est.ttest(grupo_controle, grupo_tratamento)
+print(r.conclusao)
+
+# PCA em DataFrame multivariado
+r = est.pca(df_indicadores, n_componentes=3)
+print(r.variancia_explicada * 100)  # % explicada por cada CP
+```
+
+### Exemplo 4: modelos de séries temporais
+
+```python
+from data_economist import modelos
+
+# Ajuste ARIMA
+r = modelos.arima(serie, p=1, d=1, q=1)
+print(r.aic, r.bic)
+
+# Seleção automática por AIC
+best = modelos.auto_arima(serie, max_p=4, max_q=4, max_d=2, criterio="aic")
+print(best.modelo)
+
+# Testes de raiz unitária
+print(modelos.adf(serie))
+print(modelos.kpss(serie))
+
+# Previsão de 12 meses
+prev = modelos.prever(best, steps=12)
+print(prev.valores.tail())
+```
+
+### Exemplo 5: regressao
+
+```python
+from data_economist import regressao as reg
+
+# OLS com erro robusto
+r = reg.ols(y, X, cov_type="HC1")
+print(r.params)
+
+# Quantilica
+rq = reg.quantilica(y, X, q=0.5)
+
+# Stepwise
+sw = reg.stepwise(y, X, metodo="both", criterio="aic")
+print(sw.selecionadas)
+```
+
+### Exemplo 6: importar um módulo específico
 
 ```python
 from data_economist import ibge, bcb_sgs, comexstat, eia
@@ -58,7 +146,7 @@ dados_comex = comexstat.get_by_filter("https://comexstat.mdic.gov.br/pt/geral/14
 dados_eia = eia.get_steo("PATC_WORLD", "monthly")  # TOKEN_EIA no .env
 ```
 
-### Exemplo 3: verificar versão
+### Exemplo 7: verificar versão
 
 ```python
 import data_economist
