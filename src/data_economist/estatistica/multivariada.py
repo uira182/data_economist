@@ -1,8 +1,6 @@
 """
 Análise multivariada: PCA e análise fatorial.
 
-Seção 3.6 do relatório EViews.
-
 Funções:
     pca()      — Análise de Componentes Principais
     fatorial() — Análise Fatorial Exploratória

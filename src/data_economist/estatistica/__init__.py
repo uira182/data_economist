@@ -1,7 +1,7 @@
 """
 Módulo estatistica — análise estatística para dados econômicos.
 
-Baseado nas funcionalidades da seção 3 do EViews (docs/eviews.md).
+Analise estatistica: descritiva, normalidade, correlacao, testes de hipotese, contingencia, PCA e fatorial.
 
 Submodulos
 ----------

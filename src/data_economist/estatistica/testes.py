@@ -1,8 +1,6 @@
 """
 Testes de hipótese paramétricos e não paramétricos.
 
-Seção 3.4 do relatório EViews.
-
 Funções:
     ttest()          — t-test (uma amostra, duas independentes, pareado)
     anova()          — ANOVA de um fator (F de Fisher)

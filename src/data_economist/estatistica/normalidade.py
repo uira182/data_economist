@@ -1,7 +1,5 @@
 """
-Testes de normalidade e aderência a distribuições.
-
-Seção 3.2 do relatório EViews: testes EDF (Empirical Distribution Function).
+Testes de normalidade e aderência a distribuições (EDF — Empirical Distribution Function).
 
 Funções disponíveis:
     ks()               — Kolmogorov-Smirnov

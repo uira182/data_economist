@@ -1,6 +1,8 @@
 # Módulo tratamento
 
-O módulo **tratamento** contém ferramentas de processamento e análise de séries temporais, baseadas nas funcionalidades das seções 2.3 a 2.6 do EViews. Não obtém dados da internet — aplica-se a séries que já existem (por exemplo, obtidas do BCB ou IBGE).
+O módulo **tratamento** contém ferramentas de processamento e análise de séries temporais (filtros de ciclo e tendência, suavização exponencial, conversão de frequência, whitening). Não obtém dados da internet — aplica-se a séries que já existem (por exemplo, obtidas do BCB ou IBGE).
+
+**Créditos:** Os filtros (Hodrick-Prescott, Baxter-King, Christiano-Fitzgerald), a suavização exponencial (SES, Holt, Holt-Winters, ETS) e o whitening AR(p) utilizam o pacote [statsmodels](https://www.statsmodels.org/). Pode usar pela nossa API (nomes e resultados padronizados) ou diretamente pelo statsmodels. Ver [Créditos e bibliotecas externas](creditos-bibliotecas.md).
 
 ---
 

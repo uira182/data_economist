@@ -1,8 +1,7 @@
 """
 Estatística descritiva e resumos de distribuição.
 
-Seção 3.1 do relatório EViews: resumo(), por_grupo(), ajustar_distribuicao().
-
+Funções: resumo(), por_grupo(), ajustar_distribuicao().
 Entrada esperada: pd.Series (numérica) ou pd.DataFrame.
 """
 

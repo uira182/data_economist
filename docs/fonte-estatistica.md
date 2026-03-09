@@ -1,8 +1,10 @@
 # Módulo estatistica
 
-O módulo **estatistica** reúne análises estatísticas baseadas nas funcionalidades da seção 3 do EViews: estatística descritiva, testes de normalidade, correlação, testes de hipótese, tabelas de contingência e análise multivariada.
+O módulo **estatistica** reúne análises estatísticas: estatística descritiva, testes de normalidade, correlação, testes de hipótese, tabelas de contingência e análise multivariada (PCA e fatorial).
 
 Não obtém dados da internet — opera sobre séries e DataFrames que já existem.
+
+**Créditos:** O teste de Lilliefors e a análise fatorial (com rotações) utilizam o pacote [statsmodels](https://www.statsmodels.org/). Demais funções usam scipy, pandas ou implementações próprias. Ver [Créditos e bibliotecas externas](creditos-bibliotecas.md).
 
 ---
 

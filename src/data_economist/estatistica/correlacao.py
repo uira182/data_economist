@@ -1,8 +1,6 @@
 """
 Análise de correlação e covariância.
 
-Seção 3.3 do relatório EViews.
-
 Funções:
     pearson()         — Correlação linear de Pearson
     spearman()        — Correlação de Spearman (por postos)

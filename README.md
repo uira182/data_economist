@@ -2,8 +2,8 @@
 
 Pacote Python para **analistas** e **consultoria económica** com duas vertentes:
 
-1. **Fontes de dados** — obter dados de fontes públicas: **IBGE**, **Banco Central** (BCB SGS), **ComexStat** (MDIC) e **EIA** (Energy Information Administration).
-2. **Funcionalidades** — ferramentas de análise: **dessazonalização** X-13ARIMA-SEATS, **tratamento de séries** (filtros, suavização, frequência, whitening) e **estatística** (descritiva, normalidade, correlação, testes de hipótese, contingência, PCA e fatorial).
+1. **Fontes de dados** — obter dados de fontes públicas: **IBGE**, **Banco Central** (BCB SGS), **ComexStat** (MDIC), **EIA** (Energy Information Administration) e **FRED** (Federal Reserve Bank of St. Louis).
+2. **Funcionalidades** — ferramentas de análise: **dessazonalização** X-13ARIMA-SEATS, **tratamento de séries** (filtros, suavização, frequência, whitening), **estatística** (descritiva, normalidade, correlação, testes de hipótese, contingência, PCA e fatorial), **modelos de séries temporais** (AR, MA, ARMA, ARIMA, SARIMA, ARMAX, ARFIMA, testes de raiz unitária, auto seleção e previsão) e **regressão** (OLS/WLS/NLS, robusta, quantílica, stepwise, PDL, ARDL, TAR/SETAR/STAR).
 
 Pensado para ser usado como biblioteca instalável por qualquer pessoa da área.
 
@@ -33,6 +33,23 @@ Em desenvolvimento (a partir da pasta do projeto):
 ```bash
 pip install -e .
 ```
+
+O `pip` instala automaticamente as dependências listadas abaixo. Se instalar manualmente, use Python 3.9 ou superior.
+
+### Dependências (instaladas automaticamente com o pacote)
+
+| Pacote | Versão mínima | Uso principal |
+|--------|----------------|---------------|
+| pandas | 1.3.0 | Fontes de dados, tratamento, estatística, modelos, regressão |
+| requests | 2.26.0 | BCB SGS, EIA, FRED, ComexStat (requisições HTTP) |
+| statsmodels | 0.13.0 | Tratamento (filtros, suavização), modelos (ARIMA, raiz unitária), regressão |
+| scipy | 1.7.0 | Estatística (testes, distribuições), regressão NLS |
+
+Opcionais para desenvolvimento e testes: `pytest`, `black`, `ruff`, `python-dotenv` (instaláveis com `pip install -e ".[dev]"`).
+
+### Créditos e bibliotecas externas
+
+Parte dos cálculos usa bibliotecas externas; os créditos dos algoritmos são dos respectivos projetos. O **statsmodels** é usado para modelos ARIMA, filtros, suavização, regressão e parte da estatística — pode usar essas funções pela nossa API (nomes e resultados padronizados) ou diretamente pelo statsmodels. O **X-13ARIMA-SEATS** (Census Bureau) e o **x13binary** fornecem o binário de dessazonalização; nós integramos em Python (especificação, execução e leitura dos resultados). Detalhes: [Créditos e bibliotecas externas](docs/creditos-bibliotecas.md).
 
 ---
 
@@ -121,6 +138,35 @@ tudo = eia.get_by_landing("petroleo", "monthly")  # dict série → lista de reg
 
 Documentação: [docs/fonte-eia.md](docs/fonte-eia.md).
 
+#### FRED (Federal Reserve Economic Data)
+
+Requer **token de API** no arquivo `.env`: `TOKEN_FRED=seu_token` (registro gratuito em [fred.stlouisfed.org/docs/api/api_key.html](https://fred.stlouisfed.org/docs/api/api_key.html)).
+
+```python
+from data_economist import fred
+
+# Observações de uma série (série completa ou com filtro de datas)
+dados = fred.get("CPIAUCSL")
+dados = fred.get("FEDFUNDS", date_init="2010-01-01", date_end="2024-12-31")
+dados = fred.get("CPIAUCSL", units="pc1")          # variação % a/a
+dados = fred.get("VIXCLS")                         # VIX diário
+dados = fred.get("SP500")                          # S&P 500
+
+# Metadados da série
+meta = fred.metadados("CPIAUCSL")
+# meta["title"], meta["frequency"], meta["units"], meta["observation_start"]
+
+# Busca por texto
+series = fred.buscar("consumer price index", limit=20)
+
+# Séries do notebook de ingestão (mapeamento landing Databricks)
+fred.SERIES_FRED["daily"]["pol_mon"]       # DTWEXBGS, VIXCLS, SP500...
+fred.SERIES_FRED["monthly"]["pol_mon"]     # CPIAUCSL, FEDFUNDS, UNRATE...
+fred.SERIES_FRED["monthly"]["min_sid"]     # PPI minério/siderurgia
+```
+
+Documentação: [docs/fonte-fred.md](docs/fonte-fred.md).
+
 ### Funcionalidades
 
 #### Tratamento de séries temporais
@@ -192,6 +238,47 @@ print(r.cargas)
 
 Documentação: [docs/fonte-estatistica.md](docs/fonte-estatistica.md).
 
+#### Modelos de séries temporais
+
+O módulo **modelos** cobre modelagem univariada completa (AR, MA, ARMA, ARIMA, SARIMA, ARMAX, ARFIMA, raiz unitária, seleção e previsão).
+
+```python
+from data_economist import modelos
+
+# Ajuste de modelos
+r1 = modelos.arima(serie, p=1, d=1, q=1)
+r2 = modelos.sarima(serie, p=1, d=1, q=1, P=1, D=0, Q=1, s=12)
+
+# Seleção automática
+melhor = modelos.auto_arima(serie, max_p=4, max_q=4, max_d=2, criterio="aic")
+
+# Testes de raiz unitária
+print(modelos.adf(serie))
+print(modelos.kpss(serie))
+
+# Previsão
+prev = modelos.prever(melhor, steps=12)
+print(prev.valores.tail())
+```
+
+Documentação: [docs/fonte-modelos.md](docs/fonte-modelos.md).
+
+#### Regressão (equação única)
+
+O módulo **regressao** cobre estimação de equação única e seleção de variáveis (OLS, WLS, NLS, robusta, quantílica, stepwise, PDL, ARDL, TAR/SETAR/STAR).
+
+```python
+from data_economist import regressao as reg
+
+r = reg.ols(y, X, cov_type="HC1")
+rq = reg.quantilica(y, X, q=0.5)
+sw = reg.stepwise(y, X, metodo="both", criterio="aic")
+rpdl = reg.pdl(y, x, lags=4, grau=2)
+rtar = reg.tar(y, lag=1)
+```
+
+Documentação: [docs/fonte-regressao.md](docs/fonte-regressao.md).
+
 #### Dessazonalização (X-13ARIMA-SEATS)
 
 O módulo **x13** não é uma fonte de dados: é uma **funcionalidade** para ajuste sazonal de séries que já tenhas (por exemplo obtidas do BCB ou do IBGE). Requer **x13binary** (`pip install x13binary`) e, na primeira utilização, `x13.init(project_root=raiz)`.
@@ -233,11 +320,12 @@ data_economist/
 
 - [Índice da documentação](docs/README.md)
 - **Fontes de dados:** [IBGE](docs/fonte-ibge.md) · [BCB SGS](docs/fonte-bcb-sgs.md) · [ComexStat](docs/fonte-comexstat.md) · [EIA](docs/fonte-eia.md)
-- **Funcionalidades:** [Dessazonalização X-13](docs/fonte-x13.md) · [Tratamento de séries](docs/fonte-tratamento.md) · [Estatística](docs/fonte-estatistica.md)
+- **Funcionalidades:** [Dessazonalização X-13](docs/fonte-x13.md) · [Tratamento de séries](docs/fonte-tratamento.md) · [Estatística](docs/fonte-estatistica.md) · [Modelos de séries temporais](docs/fonte-modelos.md) · [Regressão](docs/fonte-regressao.md)
 - [Plano ComexStat (MDIC)](docs/planos/plano-comexstat.md)
 - [Guia de publicação no PyPI](docs/guia-publicacao-pacote.md)
 - [Estrutura do projeto](docs/estrutura-projeto.md)
 - [Uso pelo utilizador](docs/uso-pelo-utilizador.md)
+- [Créditos e bibliotecas externas](docs/creditos-bibliotecas.md)
 
 ---
 

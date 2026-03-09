@@ -1,8 +1,6 @@
 """
 Tabulação e análise de contingência.
 
-Seção 3.5 do relatório EViews.
-
 Funções:
     tabular()  — Frequências absolutas e relativas de uma série
     cruzar()   — Tabela de contingência com medidas de associação e testes

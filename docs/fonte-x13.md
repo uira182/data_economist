@@ -37,7 +37,11 @@ Isso cria o diretório **venv** na raiz do projeto e instala o **x13binary** den
 
 ---
 
-## Referência do programa X-13
+## Referência do programa X-13 e créditos
+
+**Créditos dos cálculos:** O programa **X-13ARIMA-SEATS** é do **US Census Bureau** (método oficial de ajuste sazonal). O executável em Python é fornecido pelo pacote [x13binary](https://pypi.org/project/x13binary/) (PyPI). Os créditos dos algoritmos de dessazonalização são deles.
+
+**O que é do data_economist:** O módulo **x13** não implementa o algoritmo; utiliza o binário X-13. A nossa contribuição é a integração em Python: construção do ficheiro de especificação (.spc), invocação do executável, leitura e interpretação dos ficheiros de saída (.udg, .html, .s11–.s13) e exposição dos resultados em objetos padronizados (`SeasonalResult`, série dessazonalizada, tendência, irregular). Ou seja, a manipulação, a interface e o resultado exposto ao utilizador são crédito do data_economist. Ver [Créditos e bibliotecas externas](creditos-bibliotecas.md).
 
 | Programa | Descrição | Uso no pacote |
 |----------|-----------|----------------|

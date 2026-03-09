@@ -96,7 +96,46 @@ r = est.pca(df_indicadores, n_componentes=3)
 print(r.variancia_explicada * 100)  # % explicada por cada CP
 ```
 
-### Exemplo 4: importar um módulo específico
+### Exemplo 4: modelos de séries temporais
+
+```python
+from data_economist import modelos
+
+# Ajuste ARIMA
+r = modelos.arima(serie, p=1, d=1, q=1)
+print(r.aic, r.bic)
+
+# Seleção automática por AIC
+best = modelos.auto_arima(serie, max_p=4, max_q=4, max_d=2, criterio="aic")
+print(best.modelo)
+
+# Testes de raiz unitária
+print(modelos.adf(serie))
+print(modelos.kpss(serie))
+
+# Previsão de 12 meses
+prev = modelos.prever(best, steps=12)
+print(prev.valores.tail())
+```
+
+### Exemplo 5: regressao
+
+```python
+from data_economist import regressao as reg
+
+# OLS com erro robusto
+r = reg.ols(y, X, cov_type="HC1")
+print(r.params)
+
+# Quantilica
+rq = reg.quantilica(y, X, q=0.5)
+
+# Stepwise
+sw = reg.stepwise(y, X, metodo="both", criterio="aic")
+print(sw.selecionadas)
+```
+
+### Exemplo 6: importar um módulo específico
 
 ```python
 from data_economist import ibge, bcb_sgs, comexstat, eia
@@ -107,7 +146,7 @@ dados_comex = comexstat.get_by_filter("https://comexstat.mdic.gov.br/pt/geral/14
 dados_eia = eia.get_steo("PATC_WORLD", "monthly")  # TOKEN_EIA no .env
 ```
 
-### Exemplo 5: verificar versão
+### Exemplo 7: verificar versão
 
 ```python
 import data_economist
