@@ -7,7 +7,7 @@ de forma fácil, para uso em análise e consultoria.
 Autor: Uirá de Souza
 """
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 
 import data_economist.ibge as ibge
 from data_economist.ibge import get, url
