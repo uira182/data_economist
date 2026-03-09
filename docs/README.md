@@ -27,16 +27,6 @@ Bem-vindo à documentação do **data_economist**. O pacote oferece:
 | [Modelos de séries temporais](fonte-modelos.md) | Módulo **modelos**: AR/MA/ARMA/ARIMA/SARIMA/ARMAX, ARFIMA (GPH), auto seleção, ACF/PACF, testes de raiz unitária e previsão |
 | [Regressão](fonte-regressao.md) | Módulo **regressao**: OLS/WLS/NLS, robusta, quantílica, stepwise, PDL, ARDL e TAR/SETAR/STAR |
 
-### Planos de módulos
-
-| Documento | Descrição |
-|-----------|-----------|
-| [Plano — módulo tratamento](planos/modulo-tratamento.md) | Plano de implementação do módulo tratamento (filtros, suavização, frequência, whitening) |
-| [Plano — módulo estatistica](planos/modulo-estatistica.md) | Plano de implementação do módulo estatistica (descritiva, normalidade, correlação, testes, contingência, PCA e fatorial) |
-| [Plano — módulo modelos](planos/modulo-modelos.md) | Plano de implementação do módulo modelos (ARIMA, raiz unitária, seleção, previsão) |
-| [Plano — módulo regressao](planos/modulo-regressao.md) | Plano de implementação do módulo regressao (OLS, NLS, robusta, quantílica, stepwise, PDL, ARDL, TAR/STAR) |
-| [Plano — módulo fred](planos/modulo-fred.md) | Plano de implementação do módulo fred (fonte FRED / St. Louis Fed) |
-
 ### Créditos
 
 | Documento | Descrição |

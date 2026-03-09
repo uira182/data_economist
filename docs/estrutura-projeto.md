@@ -41,7 +41,7 @@ data_economist/                    # Raiz do repositório
 | Pasta/ficheiro | Função |
 |----------------|--------|
 | **src/data_economist/** | Todo o código que os utilizadores importam (`import data_economist`). Aqui ficam as funções para baixar dados económicos. |
-| **docs/** | Guias e documentação para quem desenvolve e para quem usa o pacote. |
+| **docs/** | Guias e documentação para quem desenvolve e para quem usa o pacote. Os ficheiros `fonte-*.md` detalham cada módulo; o que precisar de maior destaque pode ser resumido no README.md da raiz. A pasta **docs/planos/** é interna (planos de implementação) e **não sobe no repositório** — está listada no `.gitignore`. |
 | **tests/** | Testes (ex.: pytest). Não são instalados com o pacote, mas são essenciais para qualidade. |
 | **pyproject.toml** | Define nome do pacote, versão, dependências e como construir o pacote para publicação. |
 | **README.md** | Primeira impressão no PyPI e no repositório: instalação, exemplos e links. |

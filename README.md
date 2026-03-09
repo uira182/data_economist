@@ -319,9 +319,8 @@ data_economist/
 ## Documentação
 
 - [Índice da documentação](docs/README.md)
-- **Fontes de dados:** [IBGE](docs/fonte-ibge.md) · [BCB SGS](docs/fonte-bcb-sgs.md) · [ComexStat](docs/fonte-comexstat.md) · [EIA](docs/fonte-eia.md)
+- **Fontes de dados:** [IBGE](docs/fonte-ibge.md) · [BCB SGS](docs/fonte-bcb-sgs.md) · [ComexStat](docs/fonte-comexstat.md) · [EIA](docs/fonte-eia.md) · [FRED](docs/fonte-fred.md)
 - **Funcionalidades:** [Dessazonalização X-13](docs/fonte-x13.md) · [Tratamento de séries](docs/fonte-tratamento.md) · [Estatística](docs/fonte-estatistica.md) · [Modelos de séries temporais](docs/fonte-modelos.md) · [Regressão](docs/fonte-regressao.md)
-- [Plano ComexStat (MDIC)](docs/planos/plano-comexstat.md)
 - [Guia de publicação no PyPI](docs/guia-publicacao-pacote.md)
 - [Estrutura do projeto](docs/estrutura-projeto.md)
 - [Uso pelo utilizador](docs/uso-pelo-utilizador.md)
